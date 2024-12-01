@@ -1,4 +1,3 @@
-import React from "react";
 import { Word } from "../../pages/NewVocabulary";
 import WordForm from "./WordForm";
 
