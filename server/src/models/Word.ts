@@ -1,6 +1,13 @@
-import mongoose from 'mongoose';
+import mongoose,{ Schema } from 'mongoose';
 
-const wordSchema = new mongoose.Schema({
+type IWord = Document & {
+  word: string;
+  definition: string;
+  context: string;
+  synonyms: string[];
+};
+
+const wordSchema : Schema<IWord>= new mongoose.Schema({
   word: {
     type: String,
     required: true,
@@ -17,10 +24,6 @@ const wordSchema = new mongoose.Schema({
   synonyms: {
     type: [String],
     required: false,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
   },
 });
 

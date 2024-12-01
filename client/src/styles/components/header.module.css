@@ -1,0 +1,10 @@
+.header {
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+    padding: 20px;
+}
+
+.activated{
+    color: white;
+}
