@@ -1,6 +1,6 @@
 import mongoose,{ Schema } from 'mongoose';
 
-type IWord = Document & {
+export type IWord = Document & {
   word: string;
   definition: string;
   context: string;
