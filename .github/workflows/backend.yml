@@ -42,4 +42,4 @@ jobs:
           curl -X POST -H "Accept: application/json" \
                -H "Authorization: Bearer $RENDER_API_KEY" \
                -d '{}' \
-               https://api.render.com/deploy/srv-<your-service-id>
+               https://api.render.com/deploy/srv-ct5t8r5ds78s73bq2qtg
