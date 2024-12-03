@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard Component > matches snapshot 1`] = `
+<div>
+  <div>
+    Dashboard
+  </div>
+</div>
+`;
+
+exports[`Dashboard Component matches snapshot 1`] = `
+<div>
+  <div>
+    Dashboard
+  </div>
+</div>
+`;
