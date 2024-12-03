@@ -14,12 +14,6 @@
     text-align: end;
 }
 
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
@@ -42,10 +36,6 @@ th {
   display: flex;
   gap: 5px;
   padding: 10px 0;
-}
-
-.word-def textarea{
-  
 }
 
 .word-def > p {

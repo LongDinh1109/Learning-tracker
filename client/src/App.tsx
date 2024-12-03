@@ -10,21 +10,23 @@ import Header from "./components/Header";
 function App() {
   return (
     <AuthProvider>
-      <Header/>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
+      <Header />
+      <div className="app">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
 
-        <Route
-          path="/vocabulary"
-          element={
-            <AuthRoute>
-              <NewVocabulary />
-            </AuthRoute>
-          }
-        />
-      </Routes>
+          <Route
+            path="/vocabulary"
+            element={
+              <AuthRoute>
+                <NewVocabulary />
+              </AuthRoute>
+            }
+          />
+        </Routes>
+      </div>
     </AuthProvider>
   );
 }

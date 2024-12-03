@@ -22,29 +22,29 @@ export type Word = {
 
 type WordList = Word[];
 
-function NewVocabulary() {
-  const initialTableData: WordList = [
-    {
-      id: "1",
-      word: "hello",
-      wordDef: {
-        definition: "a greeting",
-        context: "used to greet someone",
-        synonyms: ["hi", "hey"],
-      },
+const exampleData: WordList = [
+  {
+    id: "1",
+    word: "hello",
+    wordDef: {
+      definition: "a greeting",
+      context: "used to greet someone",
+      synonyms: ["hi", "hey"],
     },
-    {
-      id: "2",
-      word: "world",
-      wordDef: {
-        definition: "the planet Earth",
-        context: "the place we live on",
-        synonyms: ["Earth", "planet Earth"],
-      },
+  },
+  {
+    id: "2",
+    word: "world",
+    wordDef: {
+      definition: "the planet Earth",
+      context: "the place we live on",
+      synonyms: ["Earth", "planet Earth"],
     },
-  ];
+  },
+];
 
-  const [tableData, setTableData] = useState(initialTableData);
+function NewVocabulary() {
+  const [tableData, setTableData] = useState<WordList>([]);
   const [showAddingForm, setShowAddingForm] = useState(false);
   const handleAddNewWord = async (value: Word) => {
     try {
@@ -115,6 +115,7 @@ function NewVocabulary() {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        setTableData(exampleData);
       }
     }
     fetchingData();
