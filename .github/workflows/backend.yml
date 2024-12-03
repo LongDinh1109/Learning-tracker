@@ -36,11 +36,9 @@ jobs:
           cd server
           npm test
 
-      - name: Deploy to Render
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        run: |
-          curl -X POST -H "Accept: application/json" \
-               -H "Authorization: Bearer $RENDER_API_KEY" \
-               -d '{}' \
-               https://api.render.com/deploy/srv-ct5t8r5ds78s73bq2qtg
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
+          wait-for-success: true

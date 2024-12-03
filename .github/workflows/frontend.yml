@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [18.x]
 
     steps:
       - name: Checkout code
@@ -25,7 +25,6 @@ jobs:
         with:
           cache-dependency-path: client/package-lock.json
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
       - name: Install dependencies
         run: |
@@ -38,9 +37,15 @@ jobs:
           npm run build
 
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.1.9
+        uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: client/build
-          production-deploy: true
-          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+          publish-dir: './client/dist'
+          production-branch: main
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
