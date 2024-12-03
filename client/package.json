@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --report-unused-disable-directives-severity=off",
     "preview": "vite preview",
     "test": "jest --coverage",
     "coverage": "jest --coverage --watchAll --collectCoverageFrom='src/pages/**/*.{ts,tsx}'"

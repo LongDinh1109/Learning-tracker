@@ -1,0 +1,25 @@
+{
+  "name": "learning-tracker",
+  "version": "1.0.0",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "start": "concurrently \"npm run start-client\" \"npm run start-server\"",
+    "start-client": "npm --prefix client run preview",
+    "start-server": "npm --prefix server start",
+    "install-all": "npm install && npm --prefix client install && npm --prefix server install",
+    "build": "npm --prefix client run build && npm --prefix server run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "learning-tracker": "file:"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
