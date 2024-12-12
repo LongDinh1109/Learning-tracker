@@ -3,18 +3,61 @@ import { errorHandler } from "../utils/errorHandler";
 
 interface LoginResponse {
   token: string;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+  };
 }
 
 interface SignupResponse {
   message: string;
+  user: {
+    username: string;
+    email: string;
+  };
 }
 
-export type Word = {
-  _id?: string;
+export type SignupPayload = {
+  username: string;
+  email: string;
+  password: string;
+};
+
+export type LoginPayload = {
+  username: string;
+  password: string;
+};
+
+export type WordPayload = {
   word: string;
   definition: string;
   context: string;
   synonyms: string[];
+};
+
+export type Word = WordPayload & {
+  _id: string;
+};
+
+export type DateOfCheck = {
+  date: Date;
+  isChecked: boolean;
+};
+
+export type WordChecker = {
+  word: Word;
+  dateOfCheck: {
+    first: DateOfCheck;
+    third: DateOfCheck;
+    seventh: DateOfCheck;
+    fourteenth: DateOfCheck;
+  };
+};
+
+export type UpdateWordsCheckerPayload = {
+  wordId: string;
+  times: string;
 };
 
 // Create an Axios instance with a base URL
@@ -39,13 +82,12 @@ axiosInstance.interceptors.request.use(
 
 // Function to handle login
 export const loginUser = async (
-  username: string,
-  password: string
+  payload: LoginPayload
 ): Promise<LoginResponse> => {
   try {
     const response: AxiosResponse<LoginResponse> = await axiosInstance.post(
       "/auth/login",
-      { username, password }
+      payload
     );
     return response.data; // Return data to handle further (e.g., token)
   } catch (error: unknown) {
@@ -61,14 +103,12 @@ export const loginUser = async (
 
 // Function to handle signup
 export const signupUser = async (
-  username: string,
-  email: string,
-  password: string
+  payload: SignupPayload
 ): Promise<SignupResponse> => {
   try {
     const response: AxiosResponse<SignupResponse> = await axiosInstance.post(
       "/auth/register",
-      { username, email, password }
+      payload
     );
     return response.data; // Return data (e.g., success message or token)
   } catch (error) {
@@ -91,7 +131,7 @@ export const getWords = async () => {
   }
 };
 
-export const addWord = async (word: Word) => {
+export const addWord = async (word: WordPayload) => {
   try {
     const response: AxiosResponse<Word> = await axiosInstance.post(
       "/words",
@@ -103,7 +143,7 @@ export const addWord = async (word: Word) => {
   }
 };
 
-export const editWord = async (word : Word) =>{
+export const editWord = async (word: Word) => {
   try {
     const response: AxiosResponse<Word> = await axiosInstance.post(
       `/words/${word._id}`,
@@ -113,7 +153,7 @@ export const editWord = async (word : Word) =>{
   } catch (error) {
     errorHandler(error, "Error editing word");
   }
-}
+};
 
 export const deleteWord = async (id: string) => {
   try {
@@ -123,5 +163,25 @@ export const deleteWord = async (id: string) => {
     return response.data;
   } catch (error) {
     errorHandler(error, "Error deleting word");
+  }
+};
+
+export const getDateChecker = async () => {
+  try {
+    const response: AxiosResponse<WordChecker[]> =
+      await axiosInstance.get("/date-checker");
+    return response.data;
+  } catch (error) {
+    errorHandler(error, "Error fetching date checker");
+  }
+};
+
+export const updateDateChecker = async (payload: UpdateWordsCheckerPayload) => {
+  try {
+    const response: AxiosResponse<Response> =
+      await axiosInstance.post("/date-checker", payload);
+    return response;
+  } catch (error) {
+    errorHandler(error, "Error fetching date checker");
   }
 };

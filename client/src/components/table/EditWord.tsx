@@ -1,12 +1,14 @@
-import { Word } from "../../pages/NewVocabulary";
 import WordForm from "./WordForm";
+import Button from "../Button";
+import { Word } from "@/services/api";
 
 type EditWordProps = {
   data: Word;
   onEdit: (word: Word) => void;
+  onClose: () => void;
 };
 
-export default function EditWord({ data, onEdit }: EditWordProps) {
+export default function EditWord({ data, onEdit,onClose }: EditWordProps) {
   const handleEditWord = (word: Word) => {
     onEdit(word);
   };
@@ -15,7 +17,7 @@ export default function EditWord({ data, onEdit }: EditWordProps) {
       <div className="modal-container">
         <h2>Edit word</h2>
         <WordForm mode="edit" data={data} onSubmitData={handleEditWord} />
-        <button className="close-btn" onClick={() => onEdit(data)}>x</button>
+        <Button className="close-btn" onClick={onClose}>x</Button>
       </div>
     </div>
   );

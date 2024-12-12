@@ -1,5 +1,6 @@
 import React from "react";
-import { Word } from "../../pages/NewVocabulary";
+import Button from "../Button";
+import { Word} from "@/services/api";
 type WordFormProps = {
   onSubmitData: (value: Word) => void;
 } & (EditForm | AddForm);
@@ -20,9 +21,9 @@ export default function WordForm({
   const data = mode === "edit" ? (props as EditForm).data : undefined;
   const defaultValue = {
     word: data?.word ?? "",
-    definition: data?.wordDef.definition ?? "",
-    context: data?.wordDef.context ?? "",
-    synonyms: data?.wordDef.synonyms ?? [],
+    definition: data?.definition ?? "",
+    context: data?.context ?? "",
+    synonyms: data?.synonyms ?? [],
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,15 +31,13 @@ export default function WordForm({
     const formData = new FormData(e.currentTarget);
     const formatedData = Object.fromEntries(formData);
     console.log(formatedData.definition);
-    
+
     onSubmitData({
-      id: data ? data.id : "",
+      _id: data ? data._id : "",
       word: formatedData.newWord as string,
-      wordDef: {
-        definition: formatedData.definition as string,
-        context: formatedData.context as string,
-        synonyms: synonymsItem,
-      },
+      definition: formatedData.definition as string,
+      context: formatedData.context as string,
+      synonyms: synonymsItem,
     });
   };
 
@@ -107,9 +106,9 @@ export default function WordForm({
                 onChange={(e) => handleSynonymChange(e, index)}
                 defaultValue={item}
               />
-              <button type="button" onClick={() => handleRemoveSynonym(index)}>
+              <Button type="button" onClick={() => handleRemoveSynonym(index)}>
                 x
-              </button>
+              </Button>
             </div>
           ))}
           <div style={{ visibility: "hidden" }}>
@@ -117,11 +116,13 @@ export default function WordForm({
             <button type="button">x</button>
           </div>
         </div>
-        <button type="button" onClick={handleAddSynonym}>
+        <Button type="button" onClick={handleAddSynonym} color="black">
           +
-        </button>
+        </Button>
       </p>
-      <button>{mode === "edit" ? "Update word" : "Add new word"}</button>
+      <Button onClick={() => null} color="black">
+        {mode === "edit" ? "Update word" : "Add new word"}
+      </Button>
     </form>
   );
 }

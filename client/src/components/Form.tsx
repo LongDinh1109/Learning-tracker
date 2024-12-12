@@ -6,7 +6,7 @@ interface FormProps {
   className?: string;
   header?: ReactNode;
   footer?: ReactNode;
-  error?: string;
+  error: string | null;
 }
 
 const Form = ({

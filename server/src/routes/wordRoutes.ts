@@ -4,12 +4,15 @@ import {
   addNewWord,
   deleteWord,
   getAllWords,
+  getWordsByUser,
   updateWord,
 } from '../controllers/wordController';
 
 const router = express.Router();
 // Get all words from the database
-router.get('/', getAllWords);
+router.get('/getAllWords', getAllWords);
+
+router.get('/', getWordsByUser as RequestHandler);
 
 router.post('/', addNewWord);
 

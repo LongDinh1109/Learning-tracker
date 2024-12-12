@@ -1,0 +1,11 @@
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50" height="50">
+      <!-- Text with shadow -->
+      <defs>
+        <filter id="shadow">
+          <feDropShadow dx="2" dy="2" stdDeviation="1" flood-color="#000" flood-opacity="0.3"/>
+        </filter>
+      </defs>
+      <text x="50" y="50" text-anchor="middle" font-family="Arial" font-size="24" fill="#000" filter="url(#shadow)">
+        SG
+      </text>
+</svg>

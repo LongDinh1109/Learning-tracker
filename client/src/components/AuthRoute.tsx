@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAppselector } from "@/hooks/hook";
 
 type AuthRouteProps = {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ const isTokenValid = (token: string) => {
 };
 
 export default function AuthRoute({ children }: AuthRouteProps) {
-  const { token } = useAuth();
+  const { token } = useAppselector((state) => state.auth);
   
   if (!token || !isTokenValid(token)) {
     return <Navigate to="/login" />;

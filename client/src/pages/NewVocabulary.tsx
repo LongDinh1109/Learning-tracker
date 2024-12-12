@@ -1,144 +1,67 @@
 import { useEffect, useState } from "react";
 import Table from "../components/table/Table";
 import AddNewWord from "../components/table/AddNewWord";
-import {
-  addWord,
-  deleteWord,
-  editWord,
-  getWords,
-  type Word as WordType,
-} from "../services/api";
 import "../styles/pages/vocabulary.css";
+import { useAppDispatch, useAppselector } from "@/hooks/hook";
+import {
+  addWordAsync,
+  deleteWordAsync,
+  editWordAsync,
+  fetchWordsAsync,
 
-export type Word = {
-  id: string;
-  word: string;
-  wordDef: {
-    definition: string;
-    context: string;
-    synonyms: string[];
-  };
-};
-
-type WordList = Word[];
-
-const exampleData: WordList = [
-  {
-    id: "1",
-    word: "hello",
-    wordDef: {
-      definition: "a greeting",
-      context: "used to greet someone",
-      synonyms: ["hi", "hey"],
-    },
-  },
-  {
-    id: "2",
-    word: "world",
-    wordDef: {
-      definition: "the planet Earth",
-      context: "the place we live on",
-      synonyms: ["Earth", "planet Earth"],
-    },
-  },
-];
+} from "@/store/slices/wordsSlice";
+import Spinner from "@/components/Spinner";
+import Button from "@/components/Button";
+import { Word, WordPayload } from "@/services/api";
 
 function NewVocabulary() {
-  const [tableData, setTableData] = useState<WordList>([]);
+  const { words, loading } = useAppselector((state) => state.words);
   const [showAddingForm, setShowAddingForm] = useState(false);
-  const handleAddNewWord = async (value: Word) => {
-    try {
-      const addedWord: WordType = {
-        word: value.word,
-        definition: value.wordDef.definition,
-        context: value.wordDef.context,
-        synonyms: value.wordDef.synonyms,
-      };
-      const response = await addWord(addedWord);
-      if (response) {
-        setTableData([...tableData, value]);
-        setShowAddingForm(false);
-      }
-      console.log("Word added:", response);
-    } catch (error) {
-      console.error("Error adding word:", error);
-    }
+  const dispatch = useAppDispatch();
+  const handleAddNewWord = async (value: WordPayload) => {
+    dispatch(addWordAsync(value));
+    setShowAddingForm(false);
   };
   const handleDeleteWord = async (id: string) => {
-    try {
-      const response = await deleteWord(id);
-
-      if (response) {
-        setTableData(tableData.filter((word) => word.id !== id));
-      }
-    } catch (error) {
-      console.error("Error deleting word:", error);
-    }
+    dispatch(deleteWordAsync(id));
   };
 
   const handleEditWord = async (word: Word) => {
-    const updatedData = tableData.map((item) =>
-      item.id === word.id ? word : item
-    );
-    const updatedWord = {
-      _id: word.id,
-      word: word.word,
-      definition: word.wordDef.definition,
-      context: word.wordDef.context,
-      synonyms: word.wordDef.synonyms,
-    };
-    try {
-      const response = await editWord(updatedWord);
-      if (response) {
-        setTableData(updatedData);
-      }
-    } catch (error) {
-      console.error("Error editing word:", error);
-    }
+    dispatch(editWordAsync(word));
+    setShowAddingForm(false);
   };
 
   useEffect(() => {
-    async function fetchingData() {
-      try {
-        const wordList = await getWords();
-        if (wordList) {
-          const formatedData = wordList.map((word: WordType) => ({
-            id: word._id!,
-            word: word.word,
-            wordDef: {
-              definition: word.definition,
-              context: word.context,
-              synonyms: word.synonyms,
-            },
-          }));
-          setTableData(formatedData);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setTableData(exampleData);
-      }
-    }
-    fetchingData();
-  }, []);
+    dispatch(fetchWordsAsync());
+  }, [dispatch]);
 
+  console.log(words);
+  
   return (
-    <div className='vocabulary-container'>
-      <h1>Vocabulary</h1>
-      <p>
-        <button onClick={() => setShowAddingForm(true)}>Add new word</button>
-      </p>
-      <Table
-        tableData={tableData}
-        onDelete={handleDeleteWord}
-        onEdit={handleEditWord}
-      />
-      {showAddingForm && (
-        <AddNewWord
-          onSubmit={handleAddNewWord}
-          onClose={() => setShowAddingForm(false)}
+    <>
+      <div className="vocabulary-container">
+        <h1 className="pb-5 text-3xl font-bold text-center mt-10">Vocabulary</h1>
+        <p>
+          <Button onClick={() => setShowAddingForm(true)}>Add new word</Button>
+        </p>
+        <Table
+          tableData={words}
+          onDelete={handleDeleteWord}
+          onEdit={handleEditWord}
         />
+        {showAddingForm && (
+          <AddNewWord
+            onSubmit={handleAddNewWord}
+            onClose={() => setShowAddingForm(false)}
+          />
+        )}
+      </div>
+      {loading && (
+        <div className="overlay">
+          <Spinner />
+        </div>
       )}
-    </div>
+    </>
   );
 }
 

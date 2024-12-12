@@ -1,7 +1,7 @@
+import { WordPayload } from "@/services/api";
 import WordForm from "./WordForm";
-import { Word } from "../../pages/NewVocabulary";
 type AddNewWordProps = {
-  onSubmit: (value: Word) => void;
+  onSubmit: (value: WordPayload) => void;
   onClose: () => void;
 };
 

@@ -7,6 +7,8 @@ import AuthRoute from "./components/AuthRoute";
 import { AuthProvider } from "./context/AuthContext";
 import NewVocabulary from "./pages/NewVocabulary";
 import Header from "./components/Header";
+import TrackingPage from "./pages/TrackingPage";
+import HistoryPage from "./pages/HistoryPage";
 function App() {
   return (
     <AuthProvider>
@@ -16,6 +18,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/tracking" element={<TrackingPage />} />
+          <Route path="/history" element={<HistoryPage />} />
 
           <Route
             path="/vocabulary"

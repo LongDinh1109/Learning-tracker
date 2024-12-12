@@ -28,7 +28,7 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 // Authenticate user and generate JWT
-export const authUser = async (req: Request, res: Response) => {
+export const authUser = async (req: Request, res: Response) : Promise<void | Response> => {
   const { username, password } = req.body;
 
   try {
@@ -46,8 +46,13 @@ export const authUser = async (req: Request, res: Response) => {
       expiresIn: '30d',
     });
 
-    res.json({ token, user });
+    res.status(200).json({
+      token,
+      user: { id: user._id, username: user.username, email: user.email },
+    });
   } catch (err) {
+    console.log(err);
+    
     if (err instanceof Error) {
       res.status(500).json({ message: err.message });
     } else {
