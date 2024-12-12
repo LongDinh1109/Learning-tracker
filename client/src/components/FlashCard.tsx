@@ -59,7 +59,7 @@ export default function FlashCard({ wordToCheck, dateOfCheck }: CardProps) {
       <div className="font-bold text-center">{word.word}</div>
       <div>Context: {word.context}</div>
       <div>Definition: {word.definition}</div>
-      <div>Synonyms: {word.synonyms}</div>
+      <div>Synonyms: {word.synonyms.join(", ")}</div>
       {renderDates()}
     </div>
   );
