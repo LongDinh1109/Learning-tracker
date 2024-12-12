@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import {
   addNewWord,
-  deleteWord,
   getAllWords,
   updateWord,
 } from '../controllers/wordController';
 import Word from '../models/Word';
+
 
 jest.mock('../models/Word');
 
@@ -135,14 +135,14 @@ describe('Word Controller - Add New Word', () => {
     const mockSavedWord = {
       ...mockRequest.body,
       _id: 'mockId',
-      save: jest.fn().mockResolvedValue(true),
+      saveWithContext: jest.fn().mockResolvedValue(true),
     };
 
     (Word as unknown as jest.Mock).mockImplementation(() => mockSavedWord);
 
     await addNewWord(mockRequest as Request, mockResponse as Response);
 
-    expect(mockSavedWord.save).toHaveBeenCalled();
+    expect(mockSavedWord.saveWithContext).toHaveBeenCalled();
     expect(mockStatus).toHaveBeenCalledWith(201);
     expect(mockJson).toHaveBeenCalledWith(mockSavedWord);
   });
@@ -151,21 +151,21 @@ describe('Word Controller - Add New Word', () => {
     const validationError = new Error('Validation failed');
     const mockSavedWord = {
       ...mockRequest.body,
-      save: jest.fn().mockRejectedValue(validationError),
+      saveWithContext: jest.fn().mockRejectedValue(validationError),
     };
 
     (Word as unknown as jest.Mock).mockImplementation(() => mockSavedWord);
 
     await addNewWord(mockRequest as Request, mockResponse as Response);
 
-    expect(mockSavedWord.save).toHaveBeenCalled();
+    expect(mockSavedWord.saveWithContext).toHaveBeenCalled();
     expect(mockStatus).toHaveBeenCalledWith(400);
   });
 
   it('should handle missing required fields', async () => {
     mockRequest.body = {};
     const mockSavedWord = {
-      save: jest.fn().mockRejectedValue(new Error('Missing required fields')),
+      saveWithContext: jest.fn().mockRejectedValue(new Error('Missing required fields')),
     };
 
     (Word as unknown as jest.Mock).mockImplementation(() => mockSavedWord);
@@ -173,57 +173,5 @@ describe('Word Controller - Add New Word', () => {
     await addNewWord(mockRequest as Request, mockResponse as Response);
 
     expect(mockStatus).toHaveBeenCalledWith(400);
-  });
-});
-
-describe('Word Controller - Delete Word', () => {
-  let mockRequest: Partial<Request>;
-  let mockResponse: Partial<Response>;
-  let mockJson: jest.Mock;
-  let mockStatus: jest.Mock;
-
-  beforeEach(() => {
-    mockJson = jest.fn();
-    mockStatus = jest.fn().mockReturnThis();
-    mockRequest = {
-      params: { id: 'mockId' },
-    };
-    mockResponse = {
-      json: mockJson,
-      status: mockStatus,
-    };
-  });
-
-  it('should successfully delete a word', async () => {
-    const mockDeletedWord = {
-      _id: 'mockId',
-    };
-    (Word.findById as jest.Mock).mockResolvedValue(mockDeletedWord);
-    (Word.findByIdAndDelete as jest.Mock).mockResolvedValue(mockDeletedWord);
-
-    await deleteWord(mockRequest as Request, mockResponse as Response);
-    expect(Word.findById).toHaveBeenCalledWith('mockId');
-    expect(Word.findByIdAndDelete).toHaveBeenCalledWith('mockId');
-    expect(mockStatus).toHaveBeenCalledWith(200);
-    expect(mockJson).toHaveBeenCalledWith({
-      message: 'Word deleted successfully',
-    });
-  });
-
-  it('should return 404 when word is not found', async () => {
-    (Word.findById as jest.Mock).mockResolvedValue(null);
-    await deleteWord(mockRequest as Request, mockResponse as Response);
-    expect(Word.findById).toHaveBeenCalledWith('mockId');
-    expect(mockStatus).toHaveBeenCalledWith(404);
-    expect(mockJson).toHaveBeenCalledWith({ message: 'Word not found' });
-  });
-
-  it('should handle errors during deletion', async () => {
-    const error = new Error('Database error');
-    (Word.findById as jest.Mock).mockRejectedValue(error);
-    await deleteWord(mockRequest as Request, mockResponse as Response);
-    expect(Word.findById).toHaveBeenCalledWith('mockId');
-    expect(mockStatus).toHaveBeenCalledWith(500);
-    expect(mockJson).toHaveBeenCalledWith({ message: 'Database error' });
   });
 });

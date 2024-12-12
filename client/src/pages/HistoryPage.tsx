@@ -1,6 +1,5 @@
 import FlashCard from "@/components/FlashCard";
 import { useAppselector } from "@/hooks/hook";
-import React from "react";
 
 export default function HistoryPage() {
   const words = useAppselector((state) => state.words.words);

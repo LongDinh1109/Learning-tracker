@@ -14,17 +14,17 @@ describe('Word Routes', () => {
     jest.clearAllMocks();
   });
 
-  describe('GET /api/words', () => {
+  describe('GET /api/words/getAllWords', () => {
     it('should route to getAllWords controller', async () => {
       const mockWords = [
-        { id: 1, word: 'test', translation: 'тест' }
+        { id: 1, word: 'test' }
       ];
       
       (getAllWords as jest.Mock).mockImplementation((req, res) => {
         res.status(200).json(mockWords);
       });
 
-      const response = await request(app).get('/api/words');
+      const response = await request(app).get('/api/words/getAllWords');
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockWords);
